@@ -3,6 +3,7 @@
 # Table name: operations
 #
 #  id             :bigint           not null, primary key
+#  balance        :decimal(, )      default(0.0)
 #  name           :string           not null
 #  op_type        :integer          default(1)
 #  operation_date :datetime
@@ -29,6 +30,7 @@ class Operation < ApplicationRecord
 
     belongs_to :user
 
+    before_create :calc_user_balance
     after_create :change_user_balance
 
     # Изменение баланса пользователя, в зависимости от типа операции (дохода/расхода)
@@ -41,5 +43,16 @@ class Operation < ApplicationRecord
             user.balance = user.balance - total
         end
         user.save!
+    end
+
+    # Изменение расчет баланса пользователя на момент операции (дохода/расхода)
+    #
+    # @return nil
+    def calc_user_balance
+        if op_type == INCOME
+            self.balance = user.balance + total
+        else
+            self.balance = user.balance - total
+        end
     end
 end

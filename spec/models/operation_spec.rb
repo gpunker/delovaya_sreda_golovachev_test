@@ -3,6 +3,7 @@
 # Table name: operations
 #
 #  id             :bigint           not null, primary key
+#  balance        :decimal(, )      default(0.0)
 #  name           :string           not null
 #  op_type        :integer          default(1)
 #  operation_date :datetime
