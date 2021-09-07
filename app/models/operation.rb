@@ -11,5 +11,5 @@
 #  updated_at     :datetime         not null
 #
 class Operation < ApplicationRecord
-    validates :name, presense: true
+    validates :name, presence: true
 end
