@@ -20,7 +20,26 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Operation < ApplicationRecord
+    # Доходы
+    INCOME = 1
+    # Расходы
+    EXPENDITURE = 2
+
     validates :name, presence: true
 
     belongs_to :user
+
+    after_create :change_user_balance
+
+    # Изменение баланса пользователя, в зависимости от типа операции (дохода/расхода)
+    #
+    # @return [User] объект пользователя с измененным балансом
+    def change_user_balance
+        if op_type == INCOME
+            user.balance = user.balance + total
+        else
+            user.balance = user.balance - total
+        end
+        user.save!
+    end
 end

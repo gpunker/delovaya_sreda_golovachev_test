@@ -18,3 +18,11 @@ user = User.create(
     name: 'Зубенко Михаил Петрович',
     balance: 10000
 )
+
+operation = Operation.create(
+    name: 'Покупка бензина АИ-92',
+    op_type: Operation::EXPENDITURE,
+    total: 400,
+    operation_date: DateTime.now,
+    user: user
+)
