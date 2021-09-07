@@ -5,3 +5,16 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+operation_names = [
+    'Снятие средств',
+    'Получение средств',
+    'Перевод',
+    'Покупка',
+    'Заправка',
+]
+
+user = User.create(
+    name: 'Зубенко Михаил Петрович',
+    balance: 10000
+)
