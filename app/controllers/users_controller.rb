@@ -24,9 +24,9 @@ class UsersController < ApiController
             render_errors()
         else
             @operations = Operation.where('user_id = ?', user_id).where(operation_date: date_start..date_end).order(:operation_date)
-            @balance_start = @operations.first.balance
+            @balance_start = @operations.first.balance_before
             @balance_end = @operations.last.balance
-            
+
             render 'operations/index'
         end
     end

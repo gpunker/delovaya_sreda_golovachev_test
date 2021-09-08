@@ -33,6 +33,14 @@ class Operation < ApplicationRecord
     before_create :calc_user_balance
     after_create :change_user_balance
 
+    # Вывод баланса пользователя перед операцией
+    #
+    # @return [Float] баланс перед операцией
+    def balance_before
+        op_type == INCOME ? balance - total : balance + total
+    end
+
+    private
     # Изменение баланса пользователя, в зависимости от типа операции (дохода/расхода)
     #
     # @return [User] объект пользователя с измененным балансом
