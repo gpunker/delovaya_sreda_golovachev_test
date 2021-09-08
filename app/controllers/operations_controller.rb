@@ -1,4 +1,5 @@
 class OperationsController < ApiController
+    # Создание новой операции
     def create
         parameters = operation_params
 
@@ -17,7 +18,7 @@ class OperationsController < ApiController
                 user: user
             )
 
-            render 'operations/show'
+            render :show
         rescue ActiveRecord::RecordNotFound
             add_error(404, 'Запись не найдена', "Пользователь с ID=#{parameters[:user_id]} не найден.", 3)
             render_errors()
@@ -28,6 +29,7 @@ class OperationsController < ApiController
     end
 
     private
+    # Сбор и валидация параметров операции
     def operation_params
         parameters = params.permit(:name, :type, :total, :user_id)
 

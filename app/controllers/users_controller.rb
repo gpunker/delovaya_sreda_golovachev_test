@@ -1,4 +1,5 @@
 class UsersController < ApiController
+    # Просто для вывода пользователей
     def index
         @users = User.all
 
