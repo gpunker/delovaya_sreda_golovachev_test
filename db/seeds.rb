@@ -17,56 +17,56 @@ operation = Operation.create([
         name: 'Покупка бензина АИ-92',
         op_type: Operation::EXPENDITURE,
         total: 2400,
-        operation_date: now - 15.days,
+        operation_date: now - 20.days,
         user: user
     },
     {
         name: 'Покупка продуктов',
         op_type: Operation::EXPENDITURE,
         total: 756,
-        operation_date: now - 10.days,
+        operation_date: now - 18.days,
         user: user
     },
     {
         name: 'Снятие наличных',
         op_type: Operation::EXPENDITURE,
         total: 300,
-        operation_date: now - 8.days,
+        operation_date: now - 15.days,
         user: user
     },
     {
         name: 'Перевод от другого клиента',
         op_type: Operation::INCOME,
         total: 1000,
-        operation_date: now - 5.days,
+        operation_date: now - 12.days,
         user: user
     },
     {
         name: 'Покупка продуктов',
         op_type: Operation::EXPENDITURE,
         total: 340,
-        operation_date: now + 2.days,
+        operation_date: now - 10.days,
         user: user
     },
     {
         name: 'Снятие наличных',
         op_type: Operation::EXPENDITURE,
         total: 2000,
-        operation_date: now + 3.days,
+        operation_date: now - 7.days,
         user: user
     },
     {
         name: 'Зачисление зарплаты',
         op_type: Operation::INCOME,
         total: 20000,
-        operation_date: now + 4.days,
+        operation_date: now - 4.days,
         user: user
     },
     {
         name: 'Перевод на карту',
         op_type: Operation::EXPENDITURE,
         total: 10000,
-        operation_date: now + 5.days,
+        operation_date: now - 2.days,
         user: user
     },
 

@@ -22,7 +22,7 @@ class UsersController < ApiController
         if errors?
             render_errors()
         else
-            @operations = Operation.where('user_id = ?', user_id).where(operation_date: date_start..date_end)
+            @operations = Operation.where('user_id = ?', user_id).where(operation_date: date_start..date_end).order(:operation_date)
             render 'operations/index'
         end
     end
