@@ -15,8 +15,9 @@ class UsersController < ApiController
         add_error(400, 'Ошибка валидации', 'Не указана конечная дата периода', 1) if date_end.nil?
         if user_id.nil?
             add_error(400, 'Ошибка валидации', 'Не указан ID пользователя', 1) 
+        else 
+            user_id = user_id.to_i if Integer(user_id) rescue add_error(400, 'Ошибка валидации', 'ID пользователя должен быть числом', 1)
         end
-        user_id = user_id.to_i if Integer(user_id) rescue add_error(400, 'Ошибка валидации', 'ID пользователя должен быть числом', 1)
 
         if errors?
             render_errors()

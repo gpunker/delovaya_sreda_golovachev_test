@@ -2,21 +2,60 @@ class OperationsController < ApiController
     def create
         parameters = operation_params
 
-        user = User.find(parameters[:user_id])
+        if errors?
+            return render_errors()
+        end
 
-        @operation = Operation.create!(
-            name: parameters[:name],
-            op_type: parameters[:type],
-            total: parameters[:total],
-            operation_date: DateTime.now,
-            user: user
-        )
+        begin
+            user = User.find(parameters[:user_id])
 
-        render 'operations/show'
+            # @operation = Operation.create!(
+            #     name: parameters[:name],
+            #     op_type: parameters[:type],
+            #     total: parameters[:total],
+            #     operation_date: DateTime.now,
+            #     user: user
+            # )
+
+            render 'operations/show'
+        rescue ActiveRecord::RecordNotFound
+            add_error(404, 'Запись не найдена', "Пользователь с ID=#{parameters[:user_id]} не найден.", 2)
+            render_errors()
+        end
     end
 
     private
     def operation_params
-        params.permit(:name, :type, :total, :user_id)
+        parameters = params.permit(:name, :type, :total, :user_id)
+
+        # Валидация названия
+        add_error(400, 'Ошибка валидации', 'Не указано название', 2) if parameters[:name].nil?
+
+        # Валидация типа операции
+        if parameters[:type].nil?
+            add_error(400, 'Ошибка валидации', 'Не указан тип операции. 1 - доходы, 2 - расходы', 2) 
+        elsif !parameters[:type].is_a? Integer
+            add_error(400, 'Ошибка валидации', 'Тип операции должен быть числом', 2)
+        elsif ![1, 2].include?(parameters[:type])
+            add_error(400, 'Ошибка валидации', 'Тип операции должен быть либо 1 - доходы, либо 2 - расходы', 2) 
+        end
+        
+        # Валидация суммы операции
+        if parameters[:total].nil?
+            add_error(400, 'Ошибка валидации', 'Не указана сумма операции', 2) 
+        elsif !parameters[:total].is_a? Float
+            add_error(400, 'Ошибка валидации', 'Сумма операции должна быть числом', 2) 
+        elsif parameters[:total].to_f < 0
+            add_error(400, 'Ошибка валидации', 'Сумма операции должна быть больше 0', 2) 
+        end
+
+        # Валидация id пользователя
+        if parameters[:user_id].nil?
+            add_error(400, 'Ошибка валидации', 'Не указан ID пользователя', 2) 
+        elsif !parameters[:user_id].is_a? Integer
+            add_error(400, 'Ошибка валидации', 'ID пользователя должен быть числом', 2)
+        end
+
+        return parameters
     end
 end
