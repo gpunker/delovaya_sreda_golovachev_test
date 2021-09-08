@@ -54,5 +54,7 @@ class Operation < ApplicationRecord
         else
             self.balance = user.balance - total
         end
+
+        # TODO: предусмотреть вывод исключения если у пользователя не хватает средств
     end
 end
