@@ -34,6 +34,7 @@ class UsersController < ApiController
             @operations = Operation.where('user_id = ?', user_id)
                                    .where(operation_date: date_start..date_end)
                                    .order(:operation_date)
+            # баланс на начало/конец периода
             @balance_start = @operations.first ? @operations.first.balance_before : 0
             @balance_end = @operations.last ? @operations.last.balance : 0
 
