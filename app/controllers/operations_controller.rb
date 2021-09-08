@@ -9,17 +9,20 @@ class OperationsController < ApiController
         begin
             user = User.find(parameters[:user_id])
 
-            # @operation = Operation.create!(
-            #     name: parameters[:name],
-            #     op_type: parameters[:type],
-            #     total: parameters[:total],
-            #     operation_date: DateTime.now,
-            #     user: user
-            # )
+            @operation = Operation.create!(
+                name: parameters[:name],
+                op_type: parameters[:type],
+                total: parameters[:total],
+                operation_date: DateTime.now,
+                user: user
+            )
 
             render 'operations/show'
         rescue ActiveRecord::RecordNotFound
-            add_error(404, 'Запись не найдена', "Пользователь с ID=#{parameters[:user_id]} не найден.", 2)
+            add_error(404, 'Запись не найдена', "Пользователь с ID=#{parameters[:user_id]} не найден.", 3)
+            render_errors()
+        rescue BalanceHandler::BalanceIsLessThanZeroException => e
+            add_error(400, 'Ошибка транзакции', e.message, e.code)
             render_errors()
         end
     end

@@ -55,6 +55,7 @@ class Operation < ApplicationRecord
             self.balance = user.balance - total
         end
 
-        # TODO: предусмотреть вывод исключения если у пользователя не хватает средств
+        # предусмотреть вывод исключения если у пользователя не хватает средств
+        raise BalanceHandler::BalanceIsLessThanZeroException if self.balance < 0.0
     end
 end
