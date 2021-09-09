@@ -14,9 +14,9 @@ services:
     volumes: 
       - ".:/home/docker/app"
   db:
+    image: postgres:13.2
     environment: 
       POSTGRES_PASSWORD: ${APP_DATABASE_PASSWORD}
-    image: postgres:13.2
     networks:
       - delovaya
     volumes: 

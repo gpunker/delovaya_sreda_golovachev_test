@@ -1,24 +1,29 @@
-# README
+# Тестовое задание для Деловой среды
+## Системные требования
+- ruby >= v3.0.2
+- postgresql >= v13
+- docker >= v20 (опционально)
+  
+## Установка
+### Установка без Docker
+- Клонировать проект `git clone git@github.com:gpunker/delovaya_sreda_golovachev_test.git`
+- Скопировать файл *.env.dist* с именем *.env*: `cp .env.dist .env`
+- В файле *.env* указать пароль пользователя postgres в вашем PostgreSQL
+- Создать БД: `bundle exec rails db:create`
+- Выполнить миграции: `bundle exec rails db:migrate`
+- Выполнить сиды: `bundle exec rails db:seed`
+- Запустить сервер: `bundle exec rails s`
+- Можно отправлять запросы на *localhost:3000*
+  
+### Установка с Docker
+- Клонировать проект `git clone git@github.com:gpunker/delovaya_sreda_golovachev_test.git`
+- Скопировать файл *.env.dist* с именем *.env*: `cp .env.dist .env`
+- Запустить docker: `docker-compose up`
+- Зайти внутрь контейнера *app*: `docker-compose exec app bash`
+- Создать БД: `bundle exec rails db:create`
+- Выполнить миграции: `bundle exec rails db:migrate`
+- Выполнить сиды: `bundle exec rails db:seed`
+- Можно отправлять запросы на *localhost:3080*
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Swagger
+В докере есть сервис с свагером. Досупен по адресу: `localhost:8095`
