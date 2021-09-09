@@ -1,0 +1,271 @@
+openapi: '3.0.2'
+info:
+  title: Тестовое занание для Деловой среды
+  version: '1.0'
+servers:
+  - url: https://localhost:3080/api
+paths:
+  /users:
+    get:
+      summary: Получение списка пользователей
+      description: Возвращает всех пользователей, чисто для получения ID пользователя, чтобы посмотреть операции
+      tags:
+        - "Пользователи"
+      responses:
+        '200':
+          $ref: '#/components/responses/Users'
+  /users/{id}/operations:
+    get:
+      summary: Получение списка операций пользователя
+      description: Возвращает список операций пользователя за указанный период, выводит баланс на начало и конец периода 
+      tags:
+        - "Операции"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID пользователя
+          schema:
+            type: integer
+          example: 1
+        - in: query
+          name: date_start
+          required: true
+          description: Начальнаая дата периода, с которой стоит начать поиск
+          schema:
+            type: string
+            format: date
+          example: '2021-08-01'
+        - in: query
+          name: date_end
+          required: true
+          description: Конечная дата периода, до которой стоит искать
+          schema:
+            type: string
+            format: date
+          example: '2021-08-30'
+        - in: query
+          name: page[number]
+          required: false
+          description: "Пагинация. Номер страницы. По-умолчанию: 1"
+          schema:
+            type: integer
+          example: 1
+        - in: query
+          name: page[size]
+          required: false
+          description: "Пагинация. Количество элементов на странице. По-умолчанию: 10"
+          schema:
+            type: integer
+          example: 10
+      responses:
+        '200':
+          $ref: '#/components/responses/Operations'
+        '400':
+          $ref: '#/components/responses/Errors'
+
+  /operations:
+    post:
+      summary: Создание новой операции
+      tags:
+        - "Операции"
+      requestBody:
+        $ref: '#/components/requestBodies/CreateOperation'
+      responses:
+        '200':
+          $ref: '#/components/responses/Operations'
+        '400':
+          $ref: '#/components/responses/Errors'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+          description: ID пользователя
+        type:
+          type: string
+          example: users
+          description: Тип ресурса
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              description: ФИО пользователя
+              example: Зубенко Михаил Петрович
+            balance:
+              type: number
+              format: float
+              description: Баланс средств пользователя
+              example: 29344.23
+
+    Operation:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+          description: ID операции
+        type:
+          type: string
+          example: operations
+          description: Тип ресурса
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Название операции
+              example: Покупка бензина АИ-95
+            type:
+              type: integer
+              description: Тип операции. 1 - доходы, 2 - расходы.
+              enum:
+                - 1
+                - 2
+            sum:
+              type: number
+              format: float
+              description: Сумма операции
+              example: 2400.0
+            date:
+              type: string
+              format: datetime
+              description: Дата/время операции
+              example: "2021-08-19T10:15:53.830Z"
+            balance:
+              type: number
+              format: float
+              description: Баланс средств пользователя
+              example: 29344.23
+
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: HTTP-статус ошибки
+          example: 400
+        title:
+          type: string
+          description: Заголовок ошибки
+          example: Ошибка валидации
+        message:
+          type: string
+          description: Сообщение ошибки
+          example: Не указана начальная дата периода
+        code:
+          type: integer
+          description: Код ошибки в приложении
+          example: 101
+
+  requestBodies:
+    CreateOperation:
+      description: Данные для создания новой операции
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Название операции
+                example: Покупка бензина АИ-95
+              type:
+                type: integer
+                description: Тип операции. 1 - доходы, 2 - расходы.
+                enum:
+                  - 1
+                  - 2
+              total:
+                type: number
+                format: float
+                description: Сумма операции
+                example: 2400.0
+              user_id:
+                type: integer
+                description: ID пользователя
+                example: 1
+
+  responses:
+    Users:
+     description: OK
+     content:
+       application/json:
+        schema:
+          type: object
+          properties:
+            data:
+              type: array
+              items: 
+                $ref: '#/components/schemas/User'
+
+    Operations:
+     description: OK
+     content:
+       application/json:
+        schema:
+          type: object
+          properties:
+            meta:
+              type: object
+              properties:
+                balance:
+                  type: object
+                  properties:
+                    balance_start:
+                      type: number
+                      format: float
+                      description: Баланс пользователя на начало периода
+                      example: 10000.0
+                    balance_end:
+                      type: number
+                      format: float
+                      description: Баланс пользователя на конец периода
+                      example: 13000.0
+                page:
+                  type: object
+                  properties:
+                    total:
+                      type: integer
+                      description: Общее количество записей
+                      example: 25
+                    count:
+                      type: integer
+                      description: Количество записей на странице
+                      example: 10
+                    next_page:
+                      type: integer
+                      nullable: true
+                      description: Номер следующей страницы. Если null, то страницы нет.
+                      example: 2
+                    prev_page:
+                      type: integer
+                      description: Номер предыдущей страницы. Если null, то страницы нет.
+                      nullable: true
+                      example: null
+                    current_page:
+                      type: integer
+                      description: Номер текущей страницы
+                      example: 1
+            data:
+              type: array
+              items: 
+                $ref: '#/components/schemas/Operation'       
+
+    Errors:
+     description: OK
+     content:
+       application/json:
+        schema:
+          type: object
+          properties:
+            errors:
+              type: array
+              items:
+                $ref: '#/components/schemas/Error'
+      

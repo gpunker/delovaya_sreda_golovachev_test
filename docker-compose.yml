@@ -21,6 +21,14 @@ services:
       - delovaya
     volumes: 
       - delovaya_db:/var/lib/postgresql/data
+  swagger:
+    image: swaggerapi/swagger-ui
+    ports:
+        - 8095:8080
+    environment:
+        SWAGGER_JSON: /swagger/swagger.yml
+    volumes:
+        - "./swagger:/swagger"
 
 networks: 
   delovaya:
