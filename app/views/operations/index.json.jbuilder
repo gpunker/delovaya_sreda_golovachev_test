@@ -1,7 +1,7 @@
 json.meta do
     json.balance do
-        json.balance_start @balance_start
-        json.balance_end @balance_end
+        json.balance_start @balance_start.to_f
+        json.balance_end @balance_end.to_f
     end
     json.page do
         json.total @meta_total_count
