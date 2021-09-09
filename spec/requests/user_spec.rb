@@ -24,7 +24,7 @@ RSpec.describe 'Users', type: :request do
     end
 
     describe "GET /api/users/:id/operations" do
-        it 'get operations by user' do
+        it 'get operations by user without errors' do
             user = User.create(
                 name: 'Имя',
                 balance: 1000.0
