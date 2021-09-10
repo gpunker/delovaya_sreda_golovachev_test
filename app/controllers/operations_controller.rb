@@ -18,7 +18,7 @@ class OperationsController < ApiController
                 user: user
             )
 
-            render :show
+            render :show, status: :created
         rescue ActiveRecord::RecordNotFound
             add_error(404, 'Запись не найдена', "Пользователь с ID=#{parameters[:user_id]} не найден.", 3)
             render_errors()

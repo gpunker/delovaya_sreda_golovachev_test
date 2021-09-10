@@ -72,7 +72,7 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/CreateOperation'
       responses:
-        '200':
+        '201':
           $ref: '#/components/responses/Operations'
         '400':
           $ref: '#/components/responses/Errors'
