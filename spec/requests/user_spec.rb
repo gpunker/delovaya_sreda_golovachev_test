@@ -79,5 +79,44 @@ RSpec.describe 'Users', type: :request do
             expect(body['meta']['page']['prev_page']).to eq nil
             expect(body['meta']['page']['current_page']).to eq 1
         end
+
+        it 'get users operations with errors when operation dates did not accepted' do
+            user = User.create(
+                name: 'Имя',
+                balance: 1000.0
+            )
+
+            Operation.create([
+                { name: 'Снятие наличных', op_type: Operation::EXPENDITURE, operation_date: DateTime.now, total: 200, user: user },
+                { name: 'Зачисление зарплаты', op_type: Operation::INCOME, operation_date: DateTime.now + 1.days, total: 10000, user: user }
+            ])
+
+
+            headers = { "ACCEPT" => "application/json" }
+            # params = {
+            #     date_start: DateTime.now - 10.days,
+            #     date_end: DateTime.now + 10.days,
+            # }
+            get "/api/users/#{user.id}/operations", headers: headers
+
+            expect(response).to have_http_status(400)
+            
+            body = JSON.parse(response.body)
+
+            expect(body['errors'].nil?).to eq false
+            expect(body['errors'].is_a? Array).to eq true
+            expect(body['errors'].count).to eq 2
+            # проверяем типы данных в первой ошибке
+            expect(body['errors'][0]['status'].is_a? Integer).to eq true
+            expect(body['errors'][0]['title'].is_a? String).to eq true
+            expect(body['errors'][0]['message'].is_a? String).to eq true
+            expect(body['errors'][0]['code'].is_a? Integer).to eq true
+
+            # проверяем типы данных во второй ошибке
+            expect(body['errors'][1]['status'].is_a? Integer).to eq true
+            expect(body['errors'][1]['title'].is_a? String).to eq true
+            expect(body['errors'][1]['message'].is_a? String).to eq true
+            expect(body['errors'][1]['code'].is_a? Integer).to eq true
+        end
     end
 end
