@@ -99,7 +99,7 @@ RSpec.describe 'Users', type: :request do
             # }
             get "/api/users/#{user.id}/operations", headers: headers
 
-            expect(response).to have_http_status(400)
+            expect(response).to have_http_status(:bad_request)
             
             body = JSON.parse(response.body)
 
