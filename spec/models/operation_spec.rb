@@ -121,7 +121,11 @@ RSpec.describe Operation, type: :model do
           total: 1500.0,
           user: user
         )
-      }.to raise_error(BalanceHandler::BalanceIsLessThanZeroException)
+      }.to raise_error { |error| 
+        expect(error).to be_a(BalanceHandler::BalanceIsLessThanZeroException)
+        expect(error.message).to eq 'Недостаточно средств.'
+        expect(error.code).to eq 101
+      }
     end
   end
 end
