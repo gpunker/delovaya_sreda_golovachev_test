@@ -29,6 +29,12 @@ services:
         SWAGGER_JSON: /swagger/swagger.yml
     volumes:
         - "./swagger:/swagger"
+  code_coverage:
+    image: nginx
+    ports: 
+      - 8096:80
+    volumes:
+      - ./coverage:/usr/share/nginx/html:ro
 
 networks: 
   delovaya:
