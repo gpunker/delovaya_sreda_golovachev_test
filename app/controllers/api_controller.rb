@@ -22,7 +22,7 @@ class ApiController < ApplicationController
 
     # Рендер ошибок
     def render_errors
-        render 'errors/errors'
+        render 'errors/errors', status: 400
     end
 
     # Проверка, есть ли ошибки в стеке
